@@ -95,74 +95,163 @@
     .view.active { display: block; }
 
     /* ════════════════════════════════
-       VIEW: Launcher
+       VIEW: Launcher — 大卡片
     ════════════════════════════════ */
+    #view-launcher {
+      background: linear-gradient(160deg, #f0f4ff 0%, #f4f6fb 40%, #eef2f9 100%);
+      min-height: 100vh;
+    }
     #view-launcher .main {
-      max-width: 1100px; margin: 0 auto;
-      padding: 36px 24px 64px;
+      max-width: 960px; margin: 0 auto;
+      padding: 48px 24px 80px;
     }
-    .section-title {
-      font-size: 12px; font-weight: 700; color: var(--text-muted);
-      letter-spacing: .8px; text-transform: uppercase; margin-bottom: 16px;
-    }
-    .launcher-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 18px;
-    }
-    .launcher-card {
-      background: #fff; border-radius: var(--radius-lg);
-      border: 1.5px solid var(--border);
-      padding: 22px 22px 18px;
-      cursor: pointer;
-      display: flex; flex-direction: column; gap: 12px;
-      transition: all .2s cubic-bezier(.16,1,.3,1);
-      box-shadow: var(--shadow);
-      position: relative; overflow: hidden;
-      user-select: none;
-    }
-    .launcher-card::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-      background: linear-gradient(90deg, var(--card-color, #2563eb), #3b82f6);
-      opacity: 0; transition: opacity .2s;
-    }
-    .launcher-card:hover { border-color: var(--primary-mid); box-shadow: var(--shadow-md); transform: translateY(-2px); }
-    .launcher-card:hover::before { opacity: 1; }
-    .lc-head { display: flex; align-items: flex-start; gap: 12px; }
-    .lc-emoji {
-      width: 44px; height: 44px; border-radius: 12px;
-      background: var(--primary-light);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 22px; flex-shrink: 0;
-    }
-    .lc-info { flex: 1; min-width: 0; }
-    .lc-name { font-size: 15px; font-weight: 700; line-height: 1.4; }
-    .lc-desc { font-size: 12px; color: var(--text-muted); margin-top: 3px; line-height: 1.5; }
-    .lc-footer {
-      display: flex; align-items: center; justify-content: space-between;
-      padding-top: 10px; border-top: 1px solid var(--border);
-    }
-    .lc-tag {
-      font-size: 11px; font-weight: 600; padding: 3px 9px;
-      border-radius: 20px; background: var(--primary-light); color: var(--primary);
-    }
-    .lc-arrow { font-size: 16px; color: var(--text-light); transition: transform .2s, color .2s; }
-    .launcher-card:hover .lc-arrow { transform: translateX(4px); color: var(--primary); }
 
-    /* search */
+    /* Hero */
+    .hero {
+      text-align: center;
+      margin-bottom: 44px;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--primary-light); color: var(--primary);
+      font-size: 12px; font-weight: 600;
+      padding: 5px 14px; border-radius: 20px;
+      margin-bottom: 16px;
+      border: 1px solid var(--primary-mid);
+    }
+    .hero-title {
+      font-size: 28px; font-weight: 800;
+      color: var(--text); letter-spacing: -.5px;
+      line-height: 1.3;
+    }
+    .hero-sub {
+      font-size: 14px; color: var(--text-muted);
+      margin-top: 10px; line-height: 1.6;
+    }
+
+    /* Search */
     .search-bar {
       display: flex; align-items: center; gap: 10px;
       background: #fff; border: 1.5px solid var(--border);
-      border-radius: var(--radius-sm); padding: 9px 14px;
-      margin-bottom: 24px; transition: border .15s;
+      border-radius: 12px; padding: 12px 18px;
+      margin: 0 auto 40px; transition: border .15s, box-shadow .15s;
+      max-width: 420px;
+      box-shadow: 0 2px 12px rgba(37,99,235,.06);
     }
-    .search-bar:focus-within { border-color: var(--primary); }
-    .search-icon { color: var(--text-muted); font-size: 14px; }
+    .search-bar:focus-within {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(37,99,235,.08);
+    }
+    .search-icon { color: var(--text-muted); font-size: 15px; flex-shrink: 0; }
     .search-input {
-      flex: 1; border: none; outline: none; font-size: 13px;
+      flex: 1; border: none; outline: none; font-size: 14px;
       color: var(--text); background: transparent; font-family: inherit;
     }
     .search-input::placeholder { color: var(--text-light); }
+
+    /* Section */
+    .section-label {
+      font-size: 12px; font-weight: 700; color: var(--text-muted);
+      letter-spacing: 1px; text-transform: uppercase;
+      margin-bottom: 20px; display: flex; align-items: center; gap: 10px;
+    }
+    .section-label::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+
+    /* Grid */
+    .launcher-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 24px;
+    }
+
+    /* 大卡片 */
+    .launcher-card {
+      background: #fff; border-radius: 20px;
+      border: 1px solid var(--border);
+      padding: 28px 26px 24px;
+      cursor: pointer;
+      display: flex; flex-direction: column; gap: 20px;
+      transition: all .28s cubic-bezier(.16,1,.3,1);
+      box-shadow: 0 4px 24px rgba(37,99,235,.06);
+      position: relative; overflow: hidden;
+      user-select: none;
+      min-height: 200px;
+    }
+    .launcher-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+      background: linear-gradient(90deg, var(--card-color, #2563eb), #60a5fa);
+      opacity: 0; transition: opacity .25s;
+    }
+    .launcher-card::after {
+      content: ''; position: absolute; right: -40px; top: -40px;
+      width: 120px; height: 120px; border-radius: 50%;
+      background: var(--card-color, #2563eb); opacity: 0.04;
+      transition: opacity .3s, transform .3s;
+    }
+    .launcher-card:hover {
+      border-color: var(--primary-mid);
+      box-shadow: 0 12px 40px rgba(37,99,235,.14);
+      transform: translateY(-4px);
+    }
+    .launcher-card:hover::before { opacity: 1; }
+    .launcher-card:hover::after { opacity: 0.08; transform: scale(1.2); }
+
+    .lc-head { display: flex; align-items: center; gap: 16px; }
+    .lc-emoji {
+      width: 56px; height: 56px; border-radius: 16px;
+      background: linear-gradient(135deg, var(--primary-light), #e0e7ff);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px; flex-shrink: 0;
+      transition: transform .25s;
+      box-shadow: 0 4px 12px rgba(37,99,235,.1);
+    }
+    .launcher-card:hover .lc-emoji { transform: scale(1.1) rotate(-3deg); }
+    .lc-info { flex: 1; min-width: 0; }
+    .lc-name {
+      font-size: 17px; font-weight: 800; line-height: 1.35;
+      color: var(--text); letter-spacing: -.2px;
+    }
+    .lc-desc {
+      font-size: 13px; color: var(--text-muted);
+      margin-top: 6px; line-height: 1.6;
+    }
+
+    .lc-body {
+      display: flex; flex-wrap: wrap; gap: 8px;
+    }
+    .lc-tag {
+      font-size: 12px; font-weight: 600; padding: 4px 12px;
+      border-radius: 20px; background: var(--primary-light); color: var(--primary);
+      border: 1px solid var(--primary-mid);
+    }
+
+    .lc-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-top: 16px; border-top: 1px solid var(--border);
+    }
+    .lc-status {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; color: var(--text-muted); font-weight: 500;
+    }
+    .lc-status-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      box-shadow: 0 0 0 3px rgba(16,185,129,.15);
+    }
+    .lc-cta {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 13px; font-weight: 600; color: var(--primary);
+      transition: gap .2s;
+    }
+    .launcher-card:hover .lc-cta { gap: 10px; }
+
+    /* Empty */
+    .lc-empty {
+      text-align: center; padding: 80px 24px;
+      color: var(--text-muted); font-size: 14px;
+    }
+    .lc-empty-icon { font-size: 40px; margin-bottom: 14px; opacity: .4; }
 
     /* ════════════════════════════════
        VIEW: 门锁看板 (内嵌)
@@ -418,11 +507,16 @@
   </div>
 
   <div class="main">
+    <div class="hero">
+      <div class="hero-badge">🗂 项目看板</div>
+      <div class="hero-title">产品迭代计划看板</div>
+      <div class="hero-sub">各产品线版本迭代计划与需求管理</div>
+    </div>
     <div class="search-bar">
       <span class="search-icon">🔍</span>
       <input class="search-input" id="searchInput" placeholder="搜索项目…" oninput="filterCards()" />
     </div>
-    <div class="section-title">我的项目</div>
+    <div class="section-label">我的项目</div>
     <div class="launcher-grid" id="launcherGrid"></div>
   </div>
 </div>
@@ -561,27 +655,65 @@ function showKanban()   { showView('view-kanban'); render(); }
 
 // ════════════════════════════════════════════════════════
 // Launcher 配置
-// 新增内嵌看板：加 { name, desc, emoji, viewId: 'kanban', tag, color }
-// 链接外部页面：加 { name, desc, emoji, href: './xxx/index.html', tag, color }
+// 新增内嵌看板：加 { name, desc, emoji, viewId: 'kanban', tag, color, status }
+// 链接外部页面：加 { name, desc, emoji, href: './xxx/index.html', tag, color, status }
+// status: active(进行中) / done(已完成) / plan(规划中)
 // ════════════════════════════════════════════════════════
 const LAUNCHER_PROJECTS = [
   {
-    name:  '门锁 SKU 需求看板',
-    desc:  '门锁产品线各 SKU 版本需求管理，支持拖拽排序、版本节点时间',
-    emoji: '🔐',
+    name:   '门锁 SKU 需求看板',
+    desc:   '门锁产品线各 SKU 版本需求管理，支持拖拽排序、版本节点时间',
+    emoji:  '🔐',
     viewId: 'kanban',
-    tag:   '硬件·门锁',
-    color: '#2563eb',
+    tag:    '硬件·门锁',
+    color:  '#2563eb',
+    status: 'active',
   },
 ];
+
+const LC_STATUS = {
+  active: { label: '进行中', color: '#10b981' },
+  done:   { label: '已完成', color: '#6b7280' },
+  plan:   { label: '规划中', color: '#f59e0b' },
+};
+
+function getKanbanStats() {
+  try {
+    const s = JSON.parse(localStorage.getItem('lock_kanban_v3') || '{}');
+    const skuCount = (s.skus || []).length;
+    let cardCount = 0;
+    Object.keys(s.cards || {}).forEach(k => { cardCount += (s.cards[k] || []).length; });
+    const verCount = Object.keys(s.versions || {}).length;
+    return { skuCount, cardCount, verCount };
+  } catch(e) { return { skuCount: 0, cardCount: 0, verCount: 0 }; }
+}
 
 function renderLauncher(list) {
   const grid = document.getElementById('launcherGrid');
   grid.innerHTML = '';
+
+  if (list.length === 0) {
+    grid.innerHTML = `<div class="lc-empty"><div class="lc-empty-icon">🔍</div><div>没有找到匹配的项目</div></div>`;
+    return;
+  }
+
   list.forEach(p => {
+    const st = LC_STATUS[p.status] || LC_STATUS.active;
     const el = document.createElement('div');
     el.className = 'launcher-card';
     el.style.setProperty('--card-color', p.color || '#2563eb');
+
+    let statsHtml = '';
+    if (p.viewId === 'kanban') {
+      const st2 = getKanbanStats();
+      statsHtml = `
+        <div class="lc-body">
+          <span class="lc-tag">${st2.skuCount} 个 SKU</span>
+          <span class="lc-tag">${st2.cardCount} 条需求</span>
+          <span class="lc-tag">${st2.verCount} 个版本</span>
+        </div>`;
+    }
+
     el.innerHTML = `
       <div class="lc-head">
         <div class="lc-emoji">${p.emoji}</div>
@@ -590,9 +722,13 @@ function renderLauncher(list) {
           <div class="lc-desc">${esc(p.desc)}</div>
         </div>
       </div>
+      ${statsHtml}
       <div class="lc-footer">
-        <span class="lc-tag">${esc(p.tag)}</span>
-        <span class="lc-arrow">→</span>
+        <span class="lc-status">
+          <span class="lc-status-dot" style="background:${st.color}"></span>
+          ${st.label}
+        </span>
+        <span class="lc-cta">进入看板 →</span>
       </div>
     `;
     el.addEventListener('click', () => {
