@@ -129,26 +129,6 @@
       margin-top: 10px; line-height: 1.6;
     }
 
-    /* Search */
-    .search-bar {
-      display: flex; align-items: center; gap: 10px;
-      background: #fff; border: 1.5px solid var(--border);
-      border-radius: 12px; padding: 12px 18px;
-      margin: 0 auto 40px; transition: border .15s, box-shadow .15s;
-      max-width: 420px;
-      box-shadow: 0 2px 12px rgba(37,99,235,.06);
-    }
-    .search-bar:focus-within {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 4px rgba(37,99,235,.08);
-    }
-    .search-icon { color: var(--text-muted); font-size: 15px; flex-shrink: 0; }
-    .search-input {
-      flex: 1; border: none; outline: none; font-size: 14px;
-      color: var(--text); background: transparent; font-family: inherit;
-    }
-    .search-input::placeholder { color: var(--text-light); }
-
     /* Section */
     .section-label {
       font-size: 12px; font-weight: 700; color: var(--text-muted);
@@ -512,10 +492,6 @@
       <div class="hero-title">产品迭代计划看板</div>
       <div class="hero-sub">各产品线版本迭代计划与需求管理</div>
     </div>
-    <div class="search-bar">
-      <span class="search-icon">🔍</span>
-      <input class="search-input" id="searchInput" placeholder="搜索项目…" oninput="filterCards()" />
-    </div>
     <div class="section-label">我的项目</div>
     <div class="launcher-grid" id="launcherGrid"></div>
   </div>
@@ -737,16 +713,6 @@ function renderLauncher(list) {
     });
     grid.appendChild(el);
   });
-}
-
-function filterCards() {
-  const q = document.getElementById('searchInput').value.trim().toLowerCase();
-  renderLauncher(q
-    ? LAUNCHER_PROJECTS.filter(p =>
-        p.name.toLowerCase().includes(q) ||
-        p.desc.toLowerCase().includes(q) ||
-        p.tag.toLowerCase().includes(q))
-    : LAUNCHER_PROJECTS);
 }
 
 // 时钟
