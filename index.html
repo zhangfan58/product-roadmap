@@ -3,7 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>项目看板导航</title>
+  <title>门锁需求看板</title>
+  
+  <!-- 强制清除旧数据，确保加载新的门锁数据 -->
+  <script>
+    // 清除所有旧的 localStorage 数据
+    localStorage.removeItem('lock_kanban_v3');
+    localStorage.removeItem('lock_kanban_door_lock_v1');
+    // 设置一个标记，让 loadState 知道这是首次加载新数据
+    sessionStorage.setItem('__FORCE_RELOAD_DATA__', 'true');
+  </script>
   <style>
     /* ── 全局变量 ── */
     :root {
@@ -850,10 +859,17 @@ function loadState() {
     };
   };
 
+  // 如果这是首次加载或被强制重新加载，直接使用默认数据
+  const forceReload = sessionStorage.getItem('__FORCE_RELOAD_DATA__');
+  if (forceReload) {
+    sessionStorage.removeItem('__FORCE_RELOAD_DATA__');
+    return createDefaultState();
+  }
+
   // 总是从默认数据开始
   const state = createDefaultState();
 
-  // 尝试从 localStorage 读取用户编辑内容
+  // 尝试从 localStorage 读取用户编辑内容（仅用于用户新增的数据）
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) {
