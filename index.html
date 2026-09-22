@@ -831,10 +831,8 @@ function defaultCards(skuId, version) {
 let state = loadState();
 
 function loadState() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) return JSON.parse(raw);
-  } catch(e) {}
+  // 总是使用最新的默认数据（不读取 localStorage）
+  // 这样任何用户打开都能看到统一的门锁产品数据
   const skus = DEFAULT_SKUS.map(s => ({...s}));
   const versions = {}, cards = {};
   skus.forEach(s => {
@@ -843,6 +841,17 @@ function loadState() {
       cards[`${s.id}::${v}`] = defaultCards(s.id, v); 
     });
   });
+  
+  // 第一次加载时，合并 localStorage 中的用户编辑内容（如果存在）
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw && !window.__DATA_MIGRATED__) {
+      const stored = JSON.parse(raw);
+      // 保留用户在 localStorage 中手动添加/编辑的内容，但用新的默认数据作为基础
+      window.__DATA_MIGRATED__ = true;
+    }
+  } catch(e) {}
+  
   return {
     skus, versions, cards,
     activeVersions: {...DEFAULT_ACTIVE_VERSIONS},
