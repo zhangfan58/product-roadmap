@@ -728,7 +728,7 @@ updateClock(); setInterval(updateClock, 1000);
 // 看板数据层
 // ════════════════════════════════════════════════════════
 const STORAGE_KEY = 'lock_kanban_v3';
-const DATA_VERSION = 'v4'; // 更新版本号以触发数据迁移
+const DATA_VERSION = 'v5'; // 更新版本号以触发数据迁移 - 包含所有门锁数据
 
 const DEFAULT_SKUS = [
   { id: 'sku1', name: '美的E3门锁', code: 'MLK-F10-SLV' },
@@ -832,7 +832,7 @@ function defaultCards(skuId, version) {
 let state = loadState();
 
 function loadState() {
-  // 生成默认状态
+  // 生成默认状态（包含所有门锁数据）
   const createDefaultState = () => {
     const skus = DEFAULT_SKUS.map(s => ({...s}));
     const versions = {}, cards = {};
@@ -850,52 +850,57 @@ function loadState() {
     };
   };
 
-  // 尝试从 localStorage 读取
+  // 总是从默认数据开始
+  const state = createDefaultState();
+
+  // 尝试从 localStorage 读取用户编辑内容
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) {
       const stored = JSON.parse(raw);
-      // 检查版本，确保数据兼容
-      if (stored._version === DATA_VERSION) {
-        return stored; // 使用已保存的数据
-      }
-      // 版本不匹配，进行数据迁移（合并用户编辑的内容到新默认数据中）
-      const defaultState = createDefaultState();
       
-      // 迁移策略：
-      // 1. 保留用户新增的 SKU
-      // 2. 保留用户新增的需求卡片
-      // 3. 保留用户编辑的版本时间
-      if (stored.skus && Array.isArray(stored.skus)) {
+      // 如果版本相同，可以尝试保留一些用户编辑的内容
+      if (stored._version === DATA_VERSION && stored.skus) {
+        // 保留用户新增的 SKU（不在默认数据中的）
         const userAddedSkus = stored.skus.filter(s => !DEFAULT_SKUS.find(ds => ds.id === s.id));
-        defaultState.skus = [...defaultState.skus, ...userAddedSkus];
+        state.skus = [...state.skus, ...userAddedSkus];
         
-        // 同时迁移用户添加的 SKU 的版本和卡片
+        // 保留用户新增 SKU 的版本、卡片和时间
         userAddedSkus.forEach(sku => {
           if (stored.versions && stored.versions[sku.id]) {
-            defaultState.versions[sku.id] = stored.versions[sku.id];
+            state.versions[sku.id] = stored.versions[sku.id];
           }
           if (stored.activeVersions && stored.activeVersions[sku.id]) {
-            defaultState.activeVersions[sku.id] = stored.activeVersions[sku.id];
+            state.activeVersions[sku.id] = stored.activeVersions[sku.id];
           }
+          // 保留用户在新增 SKU 中的需求卡片
+          Object.keys(stored.cards || {}).forEach(key => {
+            if (key.startsWith(sku.id + '::')) {
+              state.cards[key] = stored.cards[key];
+            }
+          });
         });
+        
+        // 保留用户编辑的版本时间（仅用于默认的6个SKU）
+        if (stored.versionMeta) {
+          Object.keys(stored.versionMeta).forEach(key => {
+            // 只保留默认 SKU 的版本时间编辑
+            const skuId = key.split('::')[0];
+            if (DEFAULT_SKUS.find(s => s.id === skuId)) {
+              state.versionMeta[key] = stored.versionMeta[key];
+            }
+          });
+        }
+        
+        return state;
       }
-      
-      // 迁移用户编辑的版本时间
-      if (stored.versionMeta) {
-        Object.keys(stored.versionMeta).forEach(key => {
-          defaultState.versionMeta[key] = stored.versionMeta[key];
-        });
-      }
-      
-      return defaultState;
     }
   } catch(e) {
     console.warn('Failed to load state from localStorage:', e);
   }
 
-  // 没有保存的数据，返回默认状态
-  return createDefaultState();
+  // 返回全新的默认状态（清除所有旧数据）
+  return state;
 }
 
 function saveState() { 
@@ -1294,6 +1299,10 @@ document.getElementById('verDateOverlay').addEventListener('click', e => { if (e
 // ════════════════════════════════════════════════════════
 // 启动
 // ════════════════════════════════════════════════════════
+
+// 强制保存当前的默认数据到 localStorage，确保显示最新的门锁数据
+saveState();
+
 renderLauncher(LAUNCHER_PROJECTS);
 </script>
 </body>
