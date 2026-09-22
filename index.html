@@ -728,6 +728,7 @@ updateClock(); setInterval(updateClock, 1000);
 // 看板数据层
 // ════════════════════════════════════════════════════════
 const STORAGE_KEY = 'lock_kanban_v3';
+const DATA_VERSION = 'v4'; // 更新版本号以触发数据迁移
 
 const DEFAULT_SKUS = [
   { id: 'sku1', name: '美的E3门锁', code: 'MLK-F10-SLV' },
@@ -831,35 +832,76 @@ function defaultCards(skuId, version) {
 let state = loadState();
 
 function loadState() {
-  // 总是使用最新的默认数据（不读取 localStorage）
-  // 这样任何用户打开都能看到统一的门锁产品数据
-  const skus = DEFAULT_SKUS.map(s => ({...s}));
-  const versions = {}, cards = {};
-  skus.forEach(s => {
-    versions[s.id] = DEFAULT_VERSIONS_BY_SKU[s.id] || [];
-    (DEFAULT_VERSIONS_BY_SKU[s.id] || []).forEach(v => { 
-      cards[`${s.id}::${v}`] = defaultCards(s.id, v); 
+  // 生成默认状态
+  const createDefaultState = () => {
+    const skus = DEFAULT_SKUS.map(s => ({...s}));
+    const versions = {}, cards = {};
+    skus.forEach(s => {
+      versions[s.id] = DEFAULT_VERSIONS_BY_SKU[s.id] || [];
+      (DEFAULT_VERSIONS_BY_SKU[s.id] || []).forEach(v => { 
+        cards[`${s.id}::${v}`] = defaultCards(s.id, v); 
+      });
     });
-  });
-  
-  // 第一次加载时，合并 localStorage 中的用户编辑内容（如果存在）
+    return {
+      _version: DATA_VERSION,
+      skus, versions, cards,
+      activeVersions: {...DEFAULT_ACTIVE_VERSIONS},
+      versionMeta: {...DEFAULT_VERSION_META},
+    };
+  };
+
+  // 尝试从 localStorage 读取
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw && !window.__DATA_MIGRATED__) {
+    if (raw) {
       const stored = JSON.parse(raw);
-      // 保留用户在 localStorage 中手动添加/编辑的内容，但用新的默认数据作为基础
-      window.__DATA_MIGRATED__ = true;
+      // 检查版本，确保数据兼容
+      if (stored._version === DATA_VERSION) {
+        return stored; // 使用已保存的数据
+      }
+      // 版本不匹配，进行数据迁移（合并用户编辑的内容到新默认数据中）
+      const defaultState = createDefaultState();
+      
+      // 迁移策略：
+      // 1. 保留用户新增的 SKU
+      // 2. 保留用户新增的需求卡片
+      // 3. 保留用户编辑的版本时间
+      if (stored.skus && Array.isArray(stored.skus)) {
+        const userAddedSkus = stored.skus.filter(s => !DEFAULT_SKUS.find(ds => ds.id === s.id));
+        defaultState.skus = [...defaultState.skus, ...userAddedSkus];
+        
+        // 同时迁移用户添加的 SKU 的版本和卡片
+        userAddedSkus.forEach(sku => {
+          if (stored.versions && stored.versions[sku.id]) {
+            defaultState.versions[sku.id] = stored.versions[sku.id];
+          }
+          if (stored.activeVersions && stored.activeVersions[sku.id]) {
+            defaultState.activeVersions[sku.id] = stored.activeVersions[sku.id];
+          }
+        });
+      }
+      
+      // 迁移用户编辑的版本时间
+      if (stored.versionMeta) {
+        Object.keys(stored.versionMeta).forEach(key => {
+          defaultState.versionMeta[key] = stored.versionMeta[key];
+        });
+      }
+      
+      return defaultState;
     }
-  } catch(e) {}
-  
-  return {
-    skus, versions, cards,
-    activeVersions: {...DEFAULT_ACTIVE_VERSIONS},
-    versionMeta: {...DEFAULT_VERSION_META},
-  };
+  } catch(e) {
+    console.warn('Failed to load state from localStorage:', e);
+  }
+
+  // 没有保存的数据，返回默认状态
+  return createDefaultState();
 }
 
-function saveState() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+function saveState() { 
+  state._version = DATA_VERSION;
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); 
+}
 function uid()       { return Math.random().toString(36).slice(2,9) + Date.now().toString(36); }
 function esc(s)      { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
