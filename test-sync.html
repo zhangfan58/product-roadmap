@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>门锁看板 - 数据同步测试</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #f0f2f7;
+    }
+    .card {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 10px 0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .success { color: #10b981; font-weight: 600; }
+    .error { color: #ef4444; font-weight: 600; }
+    .info { color: #2563eb; }
+    .code {
+      background: #f8f9fc;
+      border-left: 3px solid #2563eb;
+      padding: 10px 15px;
+      margin: 10px 0;
+      font-family: monospace;
+      overflow-x: auto;
+    }
+    button {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin: 5px;
+    }
+    button:hover { background: #1d4ed8; }
+    .test-section {
+      margin: 20px 0;
+      padding: 15px;
+      background: #fffbeb;
+      border-radius: 6px;
+      border-left: 4px solid #f59e0b;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>🔒 门锁看板 - 数据同步测试</h1>
+    <p>此页面测试多用户数据同步功能</p>
+  </div>
+
+  <div class="card">
+    <h2>测试说明</h2>
+    <ol>
+      <li>点击下方按钮测试各项功能</li>
+      <li>检查浏览器控制台（F12 → Console）查看详细日志</li>
+      <li>观察测试结果显示成功/失败状态</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h2>测试结果</h2>
+    <div id="results"></div>
+  </div>
+
+  <div class="card">
+    <h2>快速测试</h2>
+    <button onclick="testRemoteDataLoading()">📡 测试远程数据加载</button>
+    <button onclick="testLocalStorage()">💾 测试本地存储</button>
+    <button onclick="testVersionDetection()">🔄 测试版本检测</button>
+    <button onclick="testCacheBusting()">🚀 测试缓存破坏</button>
+    <button onclick="runAllTests()">✅ 运行全部测试</button>
+  </div>
+
+  <script>
+    const REMOTE_URL = 'https://zhangfan58.github.io/product-roadmap/data.json';
+    const STORAGE_KEY = 'lock_kanban_v3';
+
+    function log(message, type = 'info') {
+      const time = new Date().toLocaleTimeString();
+      console.log(`[${time}] ${message}`);
+      const results = document.getElementById('results');
+      const level = type === 'success' ? '✅' : type === 'error' ? '❌' : type === 'warn' ? '⚠️' : 'ℹ️';
+      results.innerHTML += `<div style="color: ${
+        type === 'success' ? '#10b981' : 
+        type === 'error' ? '#ef4444' : 
+        type === 'warn' ? '#f59e0b' : '#2563eb'
+      }"><strong>[${time}]</strong> ${level} ${message}</div>`;
+    }
+
+    async function testRemoteDataLoading() {
+      log('开始测试远程数据加载...', 'info');
+      try {
+        const remoteUrl = REMOTE_URL + '?t=' + Date.now();
+        log(`获取数据: ${remoteUrl}`, 'info');
+        
+        const resp = await fetch(remoteUrl, { cache: 'no-store' });
+        if (!resp.ok) {
+          log(`HTTP 错误: ${resp.status}`, 'error');
+          return;
+        }
+
+        const data = await resp.json();
+        
+        // 验证数据结构
+        if (!data.skus || !data.cards) {
+          log('数据结构无效', 'error');
+          return;
+        }
+
+        log(`✓ 成功加载远程数据`, 'success');
+        log(`  - SKU 数量: ${data.skus.length}`, 'info');
+        log(`  - 版本数量: ${Object.keys(data.cards).length}`, 'info');
+        log(`  - 时间戳: ${data.timestamp}`, 'info');
+        log(`  - 版本: ${data.version}`, 'info');
+
+      } catch (err) {
+        log(`加载失败: ${err.message}`, 'error');
+      }
+    }
+
+    function testLocalStorage() {
+      log('开始测试本地存储...', 'info');
+      try {
+        // 测试写入
+        const testData = { test: 'value', timestamp: Date.now() };
+        localStorage.setItem(STORAGE_KEY + '_test', JSON.stringify(testData));
+        log(`✓ 成功写入测试数据`, 'success');
+
+        // 测试读取
+        const retrieved = JSON.parse(localStorage.getItem(STORAGE_KEY + '_test'));
+        if (retrieved.test === 'value') {
+          log(`✓ 成功读取测试数据`, 'success');
+        } else {
+          log(`✗ 读取数据不匹配`, 'error');
+        }
+
+        // 测试删除
+        localStorage.removeItem(STORAGE_KEY + '_test');
+        const removed = localStorage.getItem(STORAGE_KEY + '_test');
+        if (removed === null) {
+          log(`✓ 成功删除测试数据`, 'success');
+        } else {
+          log(`✗ 删除失败`, 'error');
+        }
+
+        // 显示现有存储
+        const existing = localStorage.getItem(STORAGE_KEY);
+        if (existing) {
+          const size = new Blob([existing]).size;
+          log(`ℹ️  现有数据大小: ${(size / 1024).toFixed(2)} KB`, 'info');
+        }
+
+      } catch (err) {
+        log(`LocalStorage 测试失败: ${err.message}`, 'error');
+      }
+    }
+
+    function testVersionDetection() {
+      log('开始测试版本检测...', 'info');
+      try {
+        const remoteTimestamp = localStorage.getItem('lock_kanban_remote_timestamp');
+        const now = Date.now();
+
+        if (!remoteTimestamp) {
+          log(`✓ 首次加载（无本地时间戳）`, 'success');
+        } else {
+          const remote = parseInt(remoteTimestamp);
+          const age = Math.floor((now - remote) / 1000 / 60); // 分钟
+          log(`✓ 本地时间戳: ${remote}`, 'info');
+          log(`  - 数据年龄: ${age} 分钟前`, 'info');
+          
+          if (now - remote > 3600000) { // 1小时
+            log('ℹ️  本地数据可能已过期，建议刷新页面', 'warn');
+          }
+        }
+
+      } catch (err) {
+        log(`版本检测失败: ${err.message}`, 'error');
+      }
+    }
+
+    function testCacheBusting() {
+      log('开始测试缓存破坏...', 'info');
+      try {
+        const url1 = REMOTE_URL + '?t=' + Date.now();
+        const url2 = REMOTE_URL + '?t=' + (Date.now() + 1000);
+        
+        const stamp1 = url1.match(/t=(\d+)/)[1];
+        const stamp2 = url2.match(/t=(\d+)/)[1];
+
+        log(`✓ URL 1 时间戳: ${stamp1}`, 'success');
+        log(`✓ URL 2 时间戳: ${stamp2}`, 'success');
+        
+        if (stamp1 !== stamp2) {
+          log(`✓ 缓存破坏有效（时间戳不同）`, 'success');
+        } else {
+          log(`✗ 缓存破坏无效`, 'error');
+        }
+
+      } catch (err) {
+        log(`缓存测试失败: ${err.message}`, 'error');
+      }
+    }
+
+    async function runAllTests() {
+      log('═══════════════════════════════════', 'info');
+      log('运行全部测试', 'info');
+      log('═══════════════════════════════════', 'info');
+      
+      document.getElementById('results').innerHTML = '';
+      
+      await testRemoteDataLoading();
+      log('---', 'info');
+      
+      testLocalStorage();
+      log('---', 'info');
+      
+      testVersionDetection();
+      log('---', 'info');
+      
+      testCacheBusting();
+      log('---', 'info');
+      
+      log('全部测试完成！', 'success');
+      log('═══════════════════════════════════', 'info');
+    }
+
+    // 页面加载时显示环境信息
+    window.addEventListener('load', () => {
+      log(`🔒 门锁看板测试页面已加载`, 'success');
+      log(`📍 当前 URL: ${window.location.href}`, 'info');
+      log(`🌐 远程地址: ${REMOTE_URL}`, 'info');
+      log(`💾 本地存储键: ${STORAGE_KEY}`, 'info');
+    });
+  </script>
+</body>
+</html>
