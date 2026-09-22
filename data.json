@@ -1,0 +1,321 @@
+{
+  "version": "1.0",
+  "timestamp": 1726987200000,
+  "skus": [
+    {
+      "id": "sku1",
+      "name": "美的E3门锁",
+      "code": "MLK-F10-SLV"
+    },
+    {
+      "id": "sku2",
+      "name": "美的X3门锁",
+      "code": "MLK-X200-BLK"
+    },
+    {
+      "id": "sku3",
+      "name": "美的V3基础款",
+      "code": "MLK-V5-GLD"
+    },
+    {
+      "id": "sku4",
+      "name": "美的V3人脸款",
+      "code": "MLK-S1-WHT"
+    },
+    {
+      "id": "sku5",
+      "name": "COLMO图灵/新象门锁",
+      "code": "MLK-PRO-BLK"
+    },
+    {
+      "id": "sku_rhi6akzmu41otok",
+      "name": "美的X3pro门锁",
+      "code": ""
+    }
+  ],
+  "versions": {
+    "sku1": ["V1.0", "V1.1", "V2.0"],
+    "sku2": ["V1.0", "V1.1", "V2.0", "V2.1"],
+    "sku3": ["V1.0", "V1.1", "V2.0", "V2.1"],
+    "sku4": ["V1.0", "V1.1", "V2.0", "V2.1"],
+    "sku5": ["V1.0", "V1.1", "V2.0", "V3.0"],
+    "sku_rhi6akzmu41otok": ["V1.0"]
+  },
+  "cards": {
+    "sku1::V1.0": [],
+    "sku1::V1.1": [],
+    "sku1::V2.0": [
+      {
+        "id": "yrn8khumu41s57n",
+        "title": "OTA升级推送",
+        "link": "https://doc.midea.com/teamKnowledge/detail/docOnline/2082376046075486210?id=2082376046075486210&mc_widget_identifier=com.midea.kmp.teamknowledge",
+        "priority": "mid",
+        "due": "",
+        "desc": ""
+      },
+      {
+        "id": "ncecw72mu41sluj",
+        "title": "周期性密码优化",
+        "link": "https://doc.midea.com/teamKnowledge/detail/docOnline/2092066708416929794?id=2092066708416929794&mc_widget_identifier=com.midea.kmp.teamknowledge",
+        "priority": "mid",
+        "due": "",
+        "desc": ""
+      },
+      {
+        "id": "0vcna6emu4t7btb",
+        "title": "新国标要求",
+        "link": "",
+        "priority": "mid",
+        "due": "",
+        "desc": ""
+      },
+      {
+        "id": "0kp2ivzmu4ubuex",
+        "title": "故障码上报",
+        "link": "",
+        "priority": "mid",
+        "due": "",
+        "desc": ""
+      },
+      {
+        "id": "r2bn7pwmu4ueee6",
+        "title": "返工烧录SN",
+        "link": "https://doc.midea.com/teamKnowledge/detail/docOnline/2085548345754718210?id=2085548345754718210&mc_widget_identifier=com.midea.kmp.teamknowledge",
+        "priority": "mid",
+        "due": "",
+        "desc": ""
+      }
+    ],
+    "sku2::V1.0": [],
+    "sku2::V1.1": [],
+    "sku2::V2.0": [
+      {
+        "id": "1zwbrkrmu41yf1j",
+        "title": "OTA升级推送",
+        "link": "https://doc.midea.com/teamKnowledge/detail/docOnline/2082376046075486210?id=2082376046075486210&mc_widget_identifier=com.midea.kmp.teamknowledge",
+        "priority": "mid",
+        "due": "",
+        "desc": ""
+      },
+      {
+        "id": "nr0q9kfmu4uoptv",
+        "title": "临时密码优化发版",
+        "link": "",
+        "priority": "mid",
+        "due": "",
+        "desc": ""
+      }
+    ],
+    "sku3::V1.0": [],
+    "sku3::V1.1": [],
+    "sku3::V2.0": [
+      {
+        "id": "p9s5wobmu41y5ls",
+        "title": "OTA升级推送",
+        "link": "https://doc.midea.com/teamKnowledge/detail/docOnline/2082376046075486210?id=2082376046075486210&mc_widget_identifier=com.midea.kmp.teamknowledge",
+        "priority": "mid",
+        "due": "",
+        "desc": ""
+      },
+      {
+        "id": "xh7lwd2mu42pwjn",
+        "title": "省电模式家电安全提醒，天气，留言板文案优化",
+        "link": "https://doc.midea.com/teamKnowledge/detail/docOnline/2060255899126931458?id=2060255899126931458&mc_widget_identifier=com.midea.kmp.teamknowledge",
+        "priority": "mid",
+        "due": "",
+        "desc": ""
+      },
+      {
+        "id": "nki6qvvmu42q7i3",
+        "title": "主题下载，天气，留言冲突处理",
+        "link": "https://doc.midea.com/teamKnowledge/detail/docOnline/2060255899126931458?id=2060255899126931458&mc_widget_identifier=com.midea.kmp.teamknowledge",
+        "priority": "mid",
+        "due": "",
+        "desc": ""
+      }
+    ],
+    "sku4::V1.0": [],
+    "sku4::V1.1": [],
+    "sku4::V2.0": [
+      {
+        "id": "ksltwuomu41xli0",
+        "title": "OTA升级推送",
+        "link": "https://doc.midea.com/teamKnowledge/detail/docOnline/2082376046075486210?id=2082376046075486210&mc_widget_identifier=com.midea.kmp.teamknowledge",
+        "priority": "mid",
+        "due": "",
+        "desc": ""
+      },
+      {
+        "id": "6hc35izmu4uhccp",
+        "title": "主题下载，天气，留言冲突处理",
+        "link": "https://doc.midea.com/teamKnowledge/detail/docOnline/2060255899126931458?id=2060255899126931458&mc_widget_identifier=com.midea.kmp.teamknowledge",
+        "priority": "mid",
+        "due": "",
+        "desc": ""
+      }
+    ],
+    "sku5::V1.0": [],
+    "sku5::V1.1": [],
+    "sku5::V2.0": [],
+    "sku5::V3.0": [
+      {
+        "id": "rq92bv7mu41uv7a",
+        "title": "家电安全提醒优化",
+        "link": "https://doc.midea.com/teamKnowledge/detail/docOnline/2090968848580567042?id=2090968848580567042&mc_widget_identifier=com.midea.kmp.teamknowledge",
+        "priority": "mid",
+        "due": "",
+        "desc": ""
+      },
+      {
+        "id": "ijbf7nvmu41xw8e",
+        "title": "OTA升级推送",
+        "link": "https://doc.midea.com/teamKnowledge/detail/docOnline/2082376046075486210?id=2082376046075486210&mc_widget_identifier=com.midea.kmp.teamknowledge",
+        "priority": "mid",
+        "due": "",
+        "desc": ""
+      },
+      {
+        "id": "33q2160mu420hq1",
+        "title": "天气播报需求",
+        "link": "https://doc.midea.com/teamKnowledge/detail/docOnline/2091099321625567233?id=2091099321625567233&mc_widget_identifier=com.midea.kmp.teamknowledge",
+        "priority": "mid",
+        "due": "",
+        "desc": ""
+      },
+      {
+        "id": "k32h769mu42fd6c",
+        "title": "周期性密码优化",
+        "link": "https://doc.midea.com/teamKnowledge/detail/docOnline/2092066708416929794?id=2092066708416929794&mc_widget_identifier=com.midea.kmp.teamknowledge",
+        "priority": "mid",
+        "due": "",
+        "desc": ""
+      },
+      {
+        "id": "apfdg3lmu4t45xx",
+        "title": "新国标要求",
+        "link": "",
+        "priority": "mid",
+        "due": "",
+        "desc": ""
+      },
+      {
+        "id": "no04fmwmu4uy6y1",
+        "title": "返工烧录SN",
+        "link": "https://doc.midea.com/teamKnowledge/detail/docOnline/2085548345754718210?id=2085548345754718210&mc_widget_identifier=com.midea.kmp.teamknowledge",
+        "priority": "mid",
+        "due": "",
+        "desc": ""
+      }
+    ],
+    "sku3::V2.1": [
+      {
+        "id": "cdgm2dlmu42dk02",
+        "title": "家电安全提醒优化",
+        "link": "https://doc.midea.com/teamKnowledge/detail/docOnline/2090968848580567042?id=2090968848580567042&mc_widget_identifier=com.midea.kmp.teamknowledge",
+        "priority": "mid",
+        "due": "",
+        "desc": ""
+      },
+      {
+        "id": "1hzh1ommu42dzj9",
+        "title": "周期性密码优化",
+        "link": "https://doc.midea.com/teamKnowledge/detail/docOnline/2092066708416929794?id=2092066708416929794&mc_widget_identifier=com.midea.kmp.teamknowledge",
+        "priority": "mid",
+        "due": "",
+        "desc": ""
+      }
+    ],
+    "sku4::V2.1": [
+      {
+        "id": "8whbm34mu42etly",
+        "title": "家电安全提醒优化",
+        "link": "https://doc.midea.com/teamKnowledge/detail/docOnline/2090968848580567042?id=2090968848580567042&mc_widget_identifier=com.midea.kmp.teamknowledge",
+        "priority": "mid",
+        "due": "",
+        "desc": ""
+      },
+      {
+        "id": "j0iddjfmu42f75y",
+        "title": "周期性密码优化",
+        "link": "https://doc.midea.com/teamKnowledge/detail/docOnline/2092066708416929794?id=2092066708416929794&mc_widget_identifier=com.midea.kmp.teamknowledge",
+        "priority": "mid",
+        "due": "",
+        "desc": ""
+      }
+    ],
+    "sku2::V2.1": [
+      {
+        "id": "upzsme2mu4upkg4",
+        "title": "故障码上报",
+        "link": "",
+        "priority": "mid",
+        "due": "",
+        "desc": ""
+      },
+      {
+        "id": "lmzd1mcmu4uqck9",
+        "title": "返工烧录SN",
+        "link": "https://doc.midea.com/teamKnowledge/detail/docOnline/2085548345754718210?id=2085548345754718210&mc_widget_identifier=com.midea.kmp.teamknowledge",
+        "priority": "mid",
+        "due": "",
+        "desc": ""
+      }
+    ],
+    "sku_rhi6akzmu41otok::V1.0": []
+  },
+  "activeVersions": {
+    "sku1": "V2.0",
+    "sku2": "V2.0",
+    "sku3": "V2.1",
+    "sku4": "V2.1",
+    "sku5": "V3.0",
+    "sku_rhi6akzmu41otok": "V1.0"
+  },
+  "versionMeta": {
+    "sku1::V2.0": {
+      "test": "2026-10-16",
+      "uat": "2026-10-30",
+      "release": "2026-11-30"
+    },
+    "sku2::V2.0": {
+      "test": "2026-10-16",
+      "uat": "2026-10-30",
+      "release": "2026-11-30"
+    },
+    "sku3::V2.0": {
+      "test": "",
+      "uat": "",
+      "release": "2026-10-16"
+    },
+    "sku4::V2.0": {
+      "test": "",
+      "uat": "",
+      "release": "2026-10-16"
+    },
+    "sku_rhi6akzmu41otok::V1.0": {
+      "test": "",
+      "uat": "",
+      "release": "2027-01-10"
+    },
+    "sku5::V3.0": {
+      "test": "2026-10-30",
+      "uat": "2026-11-17",
+      "release": "2026-12-31"
+    },
+    "sku2::V2.1": {
+      "test": "",
+      "uat": "",
+      "release": "2027-03-31"
+    },
+    "sku3::V2.1": {
+      "test": "2026-10-23",
+      "uat": "",
+      "release": "2026-12-31"
+    },
+    "sku4::V2.1": {
+      "test": "2026-10-23",
+      "uat": "",
+      "release": "2026-12-31"
+    }
+  }
+}

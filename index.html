@@ -838,6 +838,43 @@ function defaultCards(skuId, version) {
   return DEFAULT_CARDS_DATA[key] ? (DEFAULT_CARDS_DATA[key].map(c => ({...c}))) : [];
 }
 
+// ════════════════════════════════════════════════════════
+// 远程数据加载（从 GitHub data.json 获取最新数据）
+// ════════════════════════════════════════════════════════
+async function loadRemoteData() {
+  try {
+    // GitHub Pages 路径，带时间戳破坏缓存
+    const remoteUrl = 'https://zhangfan58.github.io/product-roadmap/data.json?t=' + Date.now();
+    const resp = await fetch(remoteUrl, { cache: 'no-store' });
+    if (!resp.ok) {
+      console.warn('Failed to fetch remote data:', resp.status);
+      return null;
+    }
+    const remoteData = await resp.json();
+    
+    // 验证远程数据结构
+    if (!remoteData.skus || !remoteData.cards) {
+      console.warn('Remote data structure invalid');
+      return null;
+    }
+    
+    // 检查版本是否更新（使用 timestamp 字段）
+    const remoteTimestamp = remoteData.timestamp || 0;
+    const localTimestamp = localStorage.getItem('lock_kanban_remote_timestamp') || 0;
+    
+    if (remoteTimestamp > localTimestamp) {
+      console.log('Remote data is newer, using it');
+      localStorage.setItem('lock_kanban_remote_timestamp', remoteTimestamp.toString());
+      return remoteData;
+    }
+    
+    return null; // 本地数据已是最新
+  } catch (err) {
+    console.warn('Error loading remote data:', err);
+    return null;
+  }
+}
+
 let state = loadState();
 
 function loadState() {
@@ -867,7 +904,7 @@ function loadState() {
   }
 
   // 总是从默认数据开始
-  const state = createDefaultState();
+  let state = createDefaultState();
 
   // 尝试从 localStorage 读取用户编辑内容（仅用于用户新增的数据）
   try {
@@ -907,15 +944,13 @@ function loadState() {
             }
           });
         }
-        
-        return state;
       }
     }
   } catch(e) {
     console.warn('Failed to load state from localStorage:', e);
   }
 
-  // 返回全新的默认状态（清除所有旧数据）
+  // 返回状态（支持异步远程数据加载）
   return state;
 }
 
@@ -1318,6 +1353,35 @@ document.getElementById('verDateOverlay').addEventListener('click', e => { if (e
 
 // 强制保存当前的默认数据到 localStorage，确保显示最新的门锁数据
 saveState();
+
+// 尝试从远程加载更新的数据（不影响首次加载的快速显示）
+(async () => {
+  try {
+    const remoteData = await loadRemoteData();
+    if (remoteData) {
+      console.log('Loaded data from GitHub, applying updates...');
+      // 使用远程数据更新默认 SKU 的内容（保留用户新增的 SKU）
+      state.cards = remoteData.cards;
+      state.activeVersions = remoteData.activeVersions;
+      state.versionMeta = remoteData.versionMeta;
+      
+      // 仅更新默认 SKU 的版本列表
+      DEFAULT_SKUS.forEach(sku => {
+        if (remoteData.versions && remoteData.versions[sku.id]) {
+          state.versions[sku.id] = remoteData.versions[sku.id];
+        }
+      });
+      
+      saveState();
+      // 如果看板已打开，重新渲染
+      if (document.getElementById('view-kanban').classList.contains('active')) {
+        render();
+      }
+    }
+  } catch (err) {
+    console.warn('Could not sync remote data:', err);
+  }
+})();
 
 renderLauncher(LAUNCHER_PROJECTS);
 </script>
